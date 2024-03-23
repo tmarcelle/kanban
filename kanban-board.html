@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
+		<style>
+			@media screen, print {body{background:#fff ;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;background-image: linear-gradient(315deg, ##fafbee 0%, #57606f 74%);}.page-wrapper {margin-left: 50px;margin-right:50px;padding-top: 60px;position: relative;-webkit-transition: all 0.4s ease;-ms-transition: all 0.4s ease;transition: all 0.4s ease;}.card { background: #e7fefc;-webkit-box-shadow: 0 0 13px 0 rgba(82, 63, 105, 0.05);box-shadow: 0 0 13px 0 rgba(82, 63, 105, 0.05);margin: 0 0 24px 0;width: 100%;border: 10px;border-radius: 8px;}.custom-bg{background:#fff;margin:5px; border-radius: 5px}.custom-bg1{background: #f9f9f9;margin:5px; border-radius: 5px}.custom-spacing{margin:0;padding:.35em 0 .75em .75em}table{width: 100%;}.centerText{text-align: center;}.centerHeight{padding: 20px 0;}.rightText{text-align: right;}.pure-button-remove,.pure-button-selected,a.pure-button-remove,a.pure-button-selected{background-color:#ff3800;color:#fff}}
+		</style>
+		<style>
+			#dropbox{min-height:650px;border-radius: 10px;text-align:center;margin-right: 5px;}.custom-heading{color:grey;text-align:center}hr.custom-hr-bl{border: 1px solid #828383 ; width: 80%}hr.custom-hr{border: 1px solid #fcc58b ; width: 80%}hr.custom-hr1{border: 1px solid  #8bfceb ; width: 80%}hr.custom-hr2{border: 1px solid #c48bfc ; width: 80%}hr.custom-hr3{border: 1px solid #b9fc8b ; width: 80%}.custom-form{margin-left: 50px;}
+		</style>
+		<style>
+		.button-error,.button-secondary,.button-warning{color:#fff;border-radius:4px;text-shadow:0 1px 1px rgba(0,0,0,.2)}.button-success{background:#1cb841}.button-error{background:#ca3c3c}.button-warning{background:#df7514}.button-secondary{background:#42b8dd}
+		</style>
+		<style>
+			.high-container{box-shadow: 10px 10px 5px lightblue; margin: auto; width: 70%; margin-top:30px; }.high{ background-color: rgba(234, 74, 52, .4); min-height: 100px;}.high-header{background-color: rgba(199, 63, 41, .8); min-height:30px;}
+		</style>
+		<style>
+			.medium-container{box-shadow: 10px 10px 5px lightblue; margin: auto; width: 70%; margin-top:30px; }.medium{ background-color: rgba(253, 245, 147, .4); min-height: 100px;}.medium-header{background-color: rgba(255, 213, 115, .8); min-height:30px;}
+		</style>
+		<style>
+			.normal-container{box-shadow: 10px 10px 5px lightblue; margin: auto; width: 70%; margin-top:30px; }.normal{ background-color: rgba(26, 187, 239, .2); min-height: 100px;}.normal-header{background-color: rgba(1, 155, 205, .6); min-height:30px;}
+		</style>
+		<style>
+			.low-container{box-shadow: 10px 10px 5px lightblue; margin: auto; width: 70%; margin-top:30px; }.low{ background-color: rgba(143, 226, 206, .2); min-height: 100px;}.low-header{background-color: rgba(68, 154, 138, .6); min-height:30px;}
+		</style>
+		<style>
+			.archive-container{box-shadow: 10px 10px 5px lightblue; width: 150px; margin-top:30px; }.archive{ background-color: rgba(233, 234, 236, .4); height: 100px;}.archive-header{background-color: rgba(165, 169, 177, .6); min-height:30px;}
+		</style>
+	</head>
+	<body>
+		<div class="page-wrapper">
+			<div v-scope>
+			
+			<!-- Start print view for form section -->
+				<div class="pure-g">
+					<div class="pure-u-1 centerText" ><h1> Kanban Lite</h1></div>
+				</div>
+				<div class="pure-u-1-2" v-show="viewBoard">
+					<button class="pure-button" type="submit" @click="viewImportForm()">Import Data</button>
+					<button class="pure-button" type="submit" @click="exportData()">Export Data</button>
+					<button class="pure-button" type="submit" @click="clearAllData()">Clear All Data</button>
+					<button class="pure-button" type="submit" @click="viewArchivedData()">View Archived Stories</button>
+				</div>
+				<div class="pure-u-1-4" v-show="archivedDataViewer">
+					<button class="pure-button" type="submit" @click="exitArchive()">Return</button>
+				</div>
+				
+			<!-- Start of view board -->
+				<div class="pure-g" v-show="viewBoard">
+					
+					<div class="pure-u-1 card">
+						
+						<div class="pure-u-1-8">
+						<p class="custom-heading">Priority</p>
+							
+							<div class="high-container"  @click="createUserStory('high','create')">
+								<div class="high-header">
+									<div class="centerText"> High </div>
+								</div>
+								<div class="high">
+									<div class="centerText centerHeight">Click to create High Priority Task</div>
+								</div>
+							</div>
+							<div class="medium-container"  @click="createUserStory('medium','create')">
+								<div class="medium-header">
+									<div class="centerText"> Medium </div>
+								</div>
+								<div class="medium">
+									<div class="centerText centerHeight">Click to create Medium Priority Task</div>
+								</div>
+							</div>
+							<div class="normal-container"  @click="createUserStory('normal','create')">
+								<div class="normal-header">
+									<div class="centerText"> Normal </div>
+								</div>
+								<div class="normal">
+									<div class="centerText centerHeight">Click to create Normal Priority Task</div>
+								</div>
+							</div>
+							<div class="low-container"  @click="createUserStory('low','create')">
+								<div class="low-header">
+									<div class="centerText"> Low </div>
+								</div>
+								<div class="low">
+									<div class="centerText centerHeight">Click to create Low Priority Task</div>
+								</div>
+							</div>
+						</div>
+						<div class="pure-u-1-6 custom-bg1">
+							<p class="custom-heading">Backlog</p>
+							<hr class="custom-hr-bl">
+							<div id="dropbox" @drop="onDrop($event,'backlog')" @dragover.prevent @dragenter.prevent>
+								<div v-for="(item,index) in getUserStories" :key="index" draggable="true" @dragstart="startDrag($event, index)">
+									<div v-if="item.state=='backlog'">
+										<div :class="item.priority + '-container'" >
+										<div :class="item.priority + '-header'">
+											<div class="centerText"></div>
+										</div>
+										<div :class="item.priority">
+											<a @click="vieweditUserStory(item, index, 'update')"><div class="centerText centerHeight">{{item.title}}</div></a>
+										</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="pure-u-1-6 custom-bg">
+							<p class="custom-heading">Dev</p>
+							<hr class="custom-hr">
+							<div id="dropbox" @drop="onDrop($event,'dev')" @dragover.prevent @dragenter.prevent>
+								<div v-for="(item,index) in getUserStories" :key="index" draggable="true" @dragstart="startDrag($event, index)">
+									<div v-if="item.state=='dev'">
+										<div :class="item.priority + '-container'" >
+										<div :class="item.priority + '-header'">
+											<div class="centerText"></div>
+										</div>
+										<div :class="item.priority">
+											<a @click="vieweditUserStory(item, index, 'update')"><div class="centerText centerHeight">{{item.title}}</div></a>
+										</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					
+						<div class="pure-u-1-6 custom-bg">
+							<p class="custom-heading">QA</p>
+							<hr class="custom-hr1">
+							<div id="dropbox" @drop="onDrop($event,'qa')" @dragover.prevent @dragenter.prevent>
+								<div v-for="(item,index) in getUserStories" :key="index" draggable="true" @dragstart="startDrag($event, index)">
+									<div v-if="item.state=='qa'">
+										<div :class="item.priority + '-container'" >
+										<div :class="item.priority + '-header'">
+											<div class="centerText"></div>
+										</div>
+										<div :class="item.priority">
+											<a @click="vieweditUserStory(item, index, 'update')"><div class="centerText centerHeight">{{item.title}}</div></a>
+										</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="pure-u-1-6 custom-bg">
+							<p class="custom-heading">Prod</p>
+							<hr class="custom-hr2">
+							<div id="dropbox" @drop="onDrop($event,'prod')" @dragover.prevent @dragenter.prevent>
+								<div v-for="(item,index) in getUserStories" :key="index" draggable="true" @dragstart="startDrag($event, index)">
+									<div v-if="item.state=='prod'">
+										<div :class="item.priority + '-container'" >
+										<div :class="item.priority + '-header'">
+											<div class="centerText"></div>
+										</div>
+										<div :class="item.priority">
+											<a @click="vieweditUserStory(item, index, 'update')"><div class="centerText centerHeight">{{item.title}}</div></a>
+										</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="pure-u-1-6 custom-bg">
+							<p class="custom-heading">Done</p>
+							<hr class="custom-hr3">
+							<div id="dropbox" @drop="onDrop($event,'done')" @dragover.prevent @dragenter.prevent>
+								<div v-for="(item,index) in getUserStories" :key="index" draggable="true" @dragstart="startDrag($event, index)">
+									<div v-if="item.state=='done'">
+										<div :class="item.priority + '-container'" >
+										<div :class="item.priority + '-header'">
+											<div class="centerText"></div>
+										</div>
+										<div :class="item.priority">
+											<!-- <a @click="viewArchiveUserStory(item, index, 'archive')"><div class="centerText centerHeight">{{item.title}}</div></a> -->
+											<a @click="vieweditUserStory(item, index, 'archive')"><div class="centerText centerHeight">{{item.title}}</div></a>
+										</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<hr>
+				</div>
+				
+				<!-- Form to Edit / remove user story -->
+				<div class="pure-g" v-show="viewUserStoryForm">
+					<div class="pure-u-1 card">
+						<div class="pure-u-1-3">
+						</div>
+						<div class="pure-u-1-3 custom-bg">
+							<div id="dropbox">
+						
+								<p class="custom-heading">User Story</p>
+								
+								<hr class="custom-hr3">
+							
+								<form class="pure-form pure-form-aligned" @submit.prevent>
+									<fieldset>
+										<!-- <div class="custom-form"> -->
+										<div class="pure-control-group">
+											<label for="Title" >Title:</label>
+											<input  type="text" class="pure-input-2-3"  id="Title" v-model="formItem.title" :readonly="setReadonly || undefined" maxlength="50" />
+										</div>
+										
+										<div class="pure-control-group">
+											<label for="description">Description:</label>
+											<textarea rows="10" cols="38" id="description" v-model="formItem.description" placeholder="Enter message" :readonly="setReadonly || undefined"></textarea>
+										</div>
+										
+										<div class="pure-control-group">
+											<label for="StoryPoints">Story Points:</label>
+											<input  type="text" class="pure-input-2-3"  id="StoryPoints" v-model="formItem.storypoints" :readonly="setReadonly || undefined" />
+										</div>
+										
+										<div class="pure-control-group">
+											<label for="Priority">Priority:</label>
+											<input  type="text" class="pure-input-2-3"  id="Priority" v-model="formItem.priority" readonly />
+										</div>
+										
+										<div v-show="!setReadonly">
+											<div class="pure-control-group">
+												<label for="State">State:</label>
+												<select id="State" class="pure-input-2-3" v-model="formItem.state" >
+													<option value="backlog">Backlog</option>
+													<option value="dev">Dev</option>
+													<option value="qa">QA</option>
+													<option value="prod">Prod</option>
+													<option value="done">Done</option>
+												</select>
+											</div>
+										</div>
+										
+										<div v-show="setReadonly">
+											<div class="pure-control-group">
+												<label for="State">State:</label>
+												<input  type="text" id="State" class="pure-input-2-3" v-model="formItem.state" :readonly="setReadonly || undefined" />
+											</div>
+										</div>
+										<!-- </div> -->
+										<div v-show="storyPermissions == 'create'">
+											<button v-show="formItem.title" class="button-success pure-button" type="submit" @click="addItem(formItem)">Submit</button>
+											<button class="pure-button" type="submit" @click="cancel()">Cancel</button>
+										</div>
+										
+										<div v-show="storyPermissions == 'update'">
+										<!-- <div v-show="isUpdate"> -->
+											<button v-show="formItem.title" class="button-secondary pure-button" type="submit" @click="updateItem(formItem)">Update</button>
+											<button class="button-warning pure-button" type="submit" @click="deleteItem(formItem)">Delete</button>
+											<button class="pure-button" type="submit" @click="cancel()">Cancel</button>
+										</div>
+										
+										<div v-show="storyPermissions == 'archive'">
+											<button class="button-success pure-button" type="submit" @click="archiveData()">Archive</button>
+											<button class="pure-button" type="submit" @click="doneCancel()">Cancel</button>
+										</div>	
+										
+										<div v-show="storyPermissions == 'delete'">
+											<button class="button-success pure-button" type="submit" @click="deleteArchiveItem(formItem)">Delete</button>
+											<button class="pure-button" type="submit" @click="archiveCancel()">Cancel</button>
+										</div>
+										
+										
+									</fieldset>
+								</form>
+							</div>	
+						</div>
+					</div>
+				</div>
+				
+				<!-- Form to Import Data -->
+				<div class="pure-g" v-show="viewImportData">
+					<div class="pure-u-1 card">
+						<div class="pure-u-1-3">
+						</div>
+						<div class="pure-u-1-3 custom-bg">
+							<div id="dropbox">
+						
+								<p class="custom-heading">Import Data</p>
+								
+								<hr class="custom-hr2">
+								
+								<p>
+									Copy and paste the data in the Kaban.txt file into the text area below. <br>
+									Once completed, click the Import button.
+								</p>
+							
+								<form class="pure-form pure-form-aligned" @submit.prevent>
+									<fieldset>
+										<div class="pure-control-group">
+											<textarea rows="20" cols="50" id="import data" v-model="importItems" placeholder="Paste data"></textarea>
+										</div>
+										<button class="button-success pure-button" type="submit" @click="importData()">Import</button>
+										<button class="pure-button" type="submit" @click="cancel()">Cancel</button>
+									</fieldset>
+								</form>
+							</div>	
+						</div>
+					</div>
+				</div>
+					
+				<!-- Archived Data View -->
+				<div class="pure-g" v-show="archivedDataViewer">
+					<div class="pure-u-1 card">
+						<div class="pure-u-1 custom-bg">
+							<div id="dropbox">
+						
+								<p class="custom-heading">Archived Stories</p>
+								
+								<hr class="custom-hr3">
+								
+								<div  class="pure-u-1-8 custom-bg" v-for="(item,index) in getArchiveStories" :key="index">
+									<!-- <div v-if="item.state=='archive'"> -->
+										<div class="archive-container" >
+											<div class="archive-header">
+												<div class="centerText"></div>
+											</div>
+											<div class="archive">
+												<!-- <a @click="viewArchiveUserStory(item, index)"><div class="centerText centerHeight">{{item.title}}</div></a> -->
+												<a @click="vieweditUserStory(item, index, 'delete')"><div class="centerText centerHeight">{{item.title}}</div></a>
+											</div>
+										</div>
+									<!-- </div> -->
+								</div>
+								
+							</div>	
+						</div>
+					</div>
+				</div>
+	
+			</div>
+		</div>
+		
+		
+		
+		<script src="https://unpkg.com/petite-vue@0.2.2/dist/petite-vue.iife.js"></script>
+		<script>
+			PetiteVue
+			.createApp({
+				viewBoard: true,
+				viewUserStoryForm: false,
+				viewImportData: false,
+				viewExportData: false,
+				archivedDataViewer:false,
+				storyPermissions:null,
+				setReadonly:false,
+				formItem:{
+					title:null,
+					description:null,
+					priority:null,
+					state:"backlog",
+					storypoints:null
+				},
+				importItems:null,
+				userStories:[],
+				archiveStories:[],
+				userStoryIndex:null,
+				createUserStory(cardPriority, permissions){
+					this.viewBoard = false;
+					this.viewImportData = false;
+					this.viewUserStoryForm = true;
+					this.formItem.priority = cardPriority;
+					this.storyPermissions = permissions;
+					this.formItem.title = null;
+					this.formItem.description = null;
+					this.formItem.storypoints = null;
+
+				},
+				vieweditUserStory(itemData, itemIndex, permissions){
+					this.viewBoard = false;
+					this.viewImportData = false;
+					this.archivedDataViewer = false;
+					this.viewUserStoryForm = true;
+					this.storyPermissions = permissions;
+					this.formItem.title = itemData.title;
+					this.formItem.state = itemData.state;
+					this.formItem.description = itemData.description;
+					this.formItem.priority = itemData.priority;
+					this.formItem.storypoints = itemData.storypoints;
+					this.userStoryIndex = itemIndex;
+					
+					if(permissions == 'archive' || permissions == 'delete'){
+						this.setReadonly = true;
+					}
+				},
+				addItem(items){
+					const newItem = { ...items};
+					this.userStories.push(newItem);
+					//update localStorage
+					localStorage.setItem('userStories', JSON.stringify(this.userStories));
+					this.getUserStories;
+					
+					this.viewBoard = true;
+					this.viewImportData = false;
+					this.viewUserStoryForm = false;
+				},
+				updateItem(items){
+					const updatedItem = { ...items};
+					this.userStories[this.userStoryIndex] = updatedItem;
+					//update localStorage
+					localStorage.setItem('userStories', JSON.stringify(this.userStories));
+					this.getUserStories;
+					
+					this.viewBoard = true;
+					this.viewImportData = false;
+					this.viewUserStoryForm = false;
+					this.setReadonly = false;
+				},
+				deleteItem(){
+					this.userStories.splice(this.userStoryIndex,1);
+					//update localStorage
+					localStorage.setItem('userStories', JSON.stringify(this.userStories));
+					this.getUserStories;
+					
+					this.viewBoard = true;
+					this.viewImportData = false;
+					this.viewUserStoryForm = false;
+				},
+				deleteArchiveItem(){
+					this.archiveStories.splice(this.userStoryIndex,1);
+					//update localStorage
+					localStorage.setItem('archiveStories', JSON.stringify(this.archiveStories));
+					this.getArchiveStories;
+					
+					this.archivedDataViewer = true;
+					this.viewUserStoryForm = false;
+					this.setReadonly = false;
+
+				},
+				get getUserStories(){
+					if(localStorage.getItem('userStories') !== null){
+						this.userStories = JSON.parse(localStorage.getItem('userStories'));
+						return JSON.parse(localStorage.getItem('userStories'));
+					}
+					
+				},
+				get getArchiveStories(){
+					if(localStorage.getItem('archiveStories') !== null){
+						this.archiveStories = JSON.parse(localStorage.getItem('archiveStories'));
+						return JSON.parse(localStorage.getItem('archiveStories'));
+					}
+					
+				},
+				importData(){
+					if(this.importItems != null){
+						this.userStories.length = 0;
+						this.archiveStories.length = 0;
+						const tempUserStoriesArray = [];
+						const tempArchiveStoriesArray = [];
+						const tempData = JSON.parse(this.importItems);
+						
+						localStorage.clear();
+						
+						tempData.forEach(function(element,index,array){
+							if(element.state == "archive"){
+								const newArchiveitem = {...element};
+								tempArchiveStoriesArray.push(newArchiveitem);
+							}else{
+								const newStoryitem = {...element};
+								tempUserStoriesArray.push(newStoryitem);
+							}
+						})
+						
+						this.userStories = tempUserStoriesArray;
+						this.archiveStories = tempArchiveStoriesArray;
+						
+						//insert array to local storage
+						localStorage.setItem('userStories', JSON.stringify(tempUserStoriesArray));
+						localStorage.setItem('archiveStories', JSON.stringify(tempArchiveStoriesArray));
+						
+						this.getUserStories;
+						this.getArchiveStories;
+						location.reload();
+						
+						this.viewBoard = true;
+						this.viewUserStoryForm = false;
+						this.viewImportData = false;
+					}
+				},
+				archiveData(){
+					//set the state to archive
+					this.userStories[this.userStoryIndex].state = "archive";
+					//push the story into the archive database
+					this.archiveStories.push(this.userStories[this.userStoryIndex]);
+					//remove the story from the current userStories
+					this.userStories.splice(this.userStoryIndex,1)
+					
+					//update localStorage
+					localStorage.setItem('userStories', JSON.stringify(this.userStories));
+					localStorage.setItem('archiveStories', JSON.stringify(this.archiveStories));
+					
+					this.getUserStories;
+					this.getArchiveStories;
+					
+					
+					this.viewUserStoryForm = false;
+					this.viewBoard = true;
+					this.setReadonly = false;
+					this.formItem.title = null;
+					this.formItem.description = null;
+					this.formItem.priority = null;
+					this.formItem.storypoints = null;
+				},
+				cancel(){
+					this.formItem.title = null;
+					this.formItem.description = null;
+					this.formItem.priority = null;
+					this.formItem.storypoints = null;
+					this.viewBoard = true;
+					this.viewUserStoryForm = false;
+					this.viewImportData = false;
+					this.userStoryIndex = null;
+				},
+				clearAllData(){
+					localStorage.clear();
+					this.userStories.length = 0;
+					this.archiveStories.length = 0;
+					
+					this.getUserStories;
+					this.getArchiveStories;
+					location.reload();
+					
+				},
+				archiveCancel(){
+					this.archivedDataViewer = true;
+					this.viewUserStoryForm = false;
+					this.setReadonly = false;
+					this.userStoryIndex = null;
+				},
+				doneCancel(){
+					this.viewBoard = true;
+					this.viewUserStoryForm = false;
+					this.setReadonly = false;
+					this.userStoryIndex = null;
+				},
+				exitArchive(){
+					this.archivedDataViewer = false;
+					this.viewBoard = true;
+				},
+				exportData(){
+					//concatenate the arrays
+					const exportArrayData = this.userStories.concat(this.archiveStories);
+					if(exportArrayData.length != 0){
+						//export the data
+						var element = document.createElement('a');
+						element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportArrayData)));
+						element.setAttribute('download', 'Kaban.txt');
+
+						element.style.display = 'none';
+						document.body.appendChild(element);
+
+						element.click();
+
+						document.body.removeChild(element);
+					}else{
+						alert("There is no data to export");
+					}
+				},
+				viewImportForm(){
+					this.viewBoard = false;
+					this.viewUserStoryForm = false;
+					this.viewImportData = true;
+				},
+				viewArchivedData(){
+					this.viewBoard = false;
+					this.archivedDataViewer = true;
+				},
+				startDrag(evt, itemIndex) {
+					evt.dataTransfer.dropEffect = 'move'
+					evt.dataTransfer.effectAllowed = 'move'
+					evt.dataTransfer.setData('itemIndex', itemIndex)
+				},
+				onDrop(evt, moveState) {
+					const itemIndex = evt.dataTransfer.getData('itemIndex')
+					this.userStories[itemIndex].state = moveState;
+					localStorage.setItem('userStories', JSON.stringify(this.userStories));
+					this.getUserStories;
+				}
+			}).mount()
+		</script>
+	</body>
+</html>
